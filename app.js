@@ -6,7 +6,12 @@ var logger = require('morgan');
 // setting the sqlite to verbose debugging mode (https://github.com/TryGhost/node-sqlite3/wiki/Debugging)
 const sqlite3 = require('sqlite3').verbose();
 // creates database with fileneme db.sqlite in directory './data/'
-const db = new sqlite3.Database('./data/db.sqlite');
+const fs = require("node:fs");
+if(!fs.existsSync(path.join(__dirname, 'data'))){
+  // create data directory if it does not exist
+  fs.mkdirSync(path.join(__dirname, 'data'));
+}
+const db = new sqlite3.Database(path.join(__dirname, 'data','db.sqlite'));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -36,7 +41,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = process.env.ENV === 'development' ? err : {};
 
   // render the error page
   res.status(err.status || 500);

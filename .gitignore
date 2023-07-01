@@ -36,3 +36,5 @@ node-gyp/
 # Package lock files (uncomment if you want to ignore them)
 # package-lock.json
 # yarn.lock
+
+data/
